@@ -1,5 +1,7 @@
 # Prerequisites
 *.d
+*.cproject
+*.project
 
 # Object files
 *.o
@@ -35,6 +37,8 @@
 *.i*86
 *.x86_64
 *.hex
+/Debug/*
+/Debug
 
 # Debug files
 *.dSYM/

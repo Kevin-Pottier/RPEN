@@ -39,6 +39,7 @@
 *.hex
 /Debug/*
 /Debug
+*.cyclo
 
 # Debug files
 *.dSYM/

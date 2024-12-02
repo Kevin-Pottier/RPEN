@@ -51,8 +51,8 @@ The project underwent various tests:
 ## Contributions
 
 ### Developers
-- **[Kevin POTTIER]([https://github.com/JegHeterKevin1]) **:
-- **[Julien RACKI]([https://github.com/juickar])**:
+- **[Kevin POTTIER](https://github.com/JegHeterKevin1)**:
+- **[Julien RACKI](https://github.com/juickar)**:
 
 ## Potential Improvements
 - Reduce noise from the MPU6050 sensor data using low-pass filters.

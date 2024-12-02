@@ -1,0 +1,2 @@
+../lib/hal/src/stm32f1xx_hal_spi_ex.c:98:19:HAL_SPI_Init	3
+../lib/hal/src/stm32f1xx_hal_spi_ex.c:196:9:SPI_ISCRCErrorValid	1

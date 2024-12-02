@@ -1,0 +1,10 @@
+../lib/bsp/stm32f1_adc.c:42:6:DEMO_adc_process_1ms	2
+../lib/bsp/stm32f1_adc.c:54:6:DEMO_adc_statemachine	7
+../lib/bsp/stm32f1_adc.c:107:13:PORTS_adc_init	2
+../lib/bsp/stm32f1_adc.c:247:13:PORTS_adc_Deinit	1
+../lib/bsp/stm32f1_adc.c:304:6:ADC_init	1
+../lib/bsp/stm32f1_adc.c:361:6:ADC_Deinit	1
+../lib/bsp/stm32f1_adc.c:380:9:ADC_getValue	3
+../lib/bsp/stm32f1_adc.c:392:6:ADC_set_callback_function	1
+../lib/bsp/stm32f1_adc.c:399:8:ADC_is_new_sample_available	2
+../lib/bsp/stm32f1_adc.c:412:6:DMA1_Channel1_IRQHandler	2

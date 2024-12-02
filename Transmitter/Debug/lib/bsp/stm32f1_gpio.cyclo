@@ -1,0 +1,2 @@
+../lib/bsp/stm32f1_gpio.c:44:6:BSP_GPIO_Enable	1
+../lib/bsp/stm32f1_gpio.c:72:6:BSP_GPIO_PinCfg	1

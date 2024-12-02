@@ -1,0 +1,12 @@
+../lib/CMSIS/core/core_cm3.h:1762:34:__NVIC_SystemReset	1
+../lib/bsp/stm32f1_spi.c:28:6:SPI_Init	3
+../lib/bsp/stm32f1_spi.c:84:6:SPI_config_remap	2
+../lib/bsp/stm32f1_spi.c:97:9:SPI_ReadNoRegister	2
+../lib/bsp/stm32f1_spi.c:113:6:SPI_ReadMultiNoRegister	2
+../lib/bsp/stm32f1_spi.c:125:6:SPI_WriteNoRegister	2
+../lib/bsp/stm32f1_spi.c:138:6:SPI_WriteMultiNoRegister	2
+../lib/bsp/stm32f1_spi.c:146:9:SPI_WriteRead	2
+../lib/bsp/stm32f1_spi.c:169:6:SPI_WriteReadBuffer	2
+../lib/bsp/stm32f1_spi.c:185:19:TM_SPI_SetDataSize	2
+../lib/bsp/stm32f1_spi.c:216:6:SPI_Cmd	2
+../lib/bsp/stm32f1_spi.c:240:6:SPI_setBaudRate	1

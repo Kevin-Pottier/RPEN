@@ -1,0 +1,14 @@
+../lib/hal/src/stm32f1xx_hal_rtc_ex.c:97:19:HAL_RTCEx_SetTamper	5
+../lib/hal/src/stm32f1xx_hal_rtc_ex.c:143:19:HAL_RTCEx_SetTamper_IT	5
+../lib/hal/src/stm32f1xx_hal_rtc_ex.c:191:19:HAL_RTCEx_DeactivateTamper	3
+../lib/hal/src/stm32f1xx_hal_rtc_ex.c:233:6:HAL_RTCEx_TamperIRQHandler	3
+../lib/hal/src/stm32f1xx_hal_rtc_ex.c:259:13:HAL_RTCEx_Tamper1EventCallback	1
+../lib/hal/src/stm32f1xx_hal_rtc_ex.c:275:19:HAL_RTCEx_PollForTamper1Event	6
+../lib/hal/src/stm32f1xx_hal_rtc_ex.c:331:19:HAL_RTCEx_SetSecond_IT	3
+../lib/hal/src/stm32f1xx_hal_rtc_ex.c:361:19:HAL_RTCEx_DeactivateSecond	3
+../lib/hal/src/stm32f1xx_hal_rtc_ex.c:391:6:HAL_RTCEx_RTCIRQHandler	4
+../lib/hal/src/stm32f1xx_hal_rtc_ex.c:431:13:HAL_RTCEx_RTCEventCallback	1
+../lib/hal/src/stm32f1xx_hal_rtc_ex.c:446:13:HAL_RTCEx_RTCEventErrorCallback	1
+../lib/hal/src/stm32f1xx_hal_rtc_ex.c:486:6:HAL_RTCEx_BKUPWrite	1
+../lib/hal/src/stm32f1xx_hal_rtc_ex.c:511:10:HAL_RTCEx_BKUPRead	1
+../lib/hal/src/stm32f1xx_hal_rtc_ex.c:541:19:HAL_RTCEx_SetSmoothCalib	3

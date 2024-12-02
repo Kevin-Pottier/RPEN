@@ -1,0 +1,5 @@
+../lib/hal/src/stm32f1xx_hal_wwdg.c:166:19:HAL_WWDG_Init	2
+../lib/hal/src/stm32f1xx_hal_wwdg.c:203:13:HAL_WWDG_MspInit	1
+../lib/hal/src/stm32f1xx_hal_wwdg.c:239:19:HAL_WWDG_Refresh	1
+../lib/hal/src/stm32f1xx_hal_wwdg.c:262:6:HAL_WWDG_IRQHandler	3
+../lib/hal/src/stm32f1xx_hal_wwdg.c:285:13:HAL_WWDG_EarlyWakeupCallback	1

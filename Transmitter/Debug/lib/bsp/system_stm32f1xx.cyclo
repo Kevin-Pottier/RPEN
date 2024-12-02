@@ -1,0 +1,2 @@
+../lib/bsp/system_stm32f1xx.c:174:6:SystemInit	1
+../lib/bsp/system_stm32f1xx.c:264:6:SystemCoreClockUpdate	7

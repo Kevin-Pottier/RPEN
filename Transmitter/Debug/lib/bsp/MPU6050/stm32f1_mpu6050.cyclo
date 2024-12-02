@@ -1,0 +1,6 @@
+../lib/bsp/MPU6050/stm32f1_mpu6050.c:55:6:MPU6050_demo	2
+../lib/bsp/MPU6050/stm32f1_mpu6050.c:104:18:MPU6050_Init	15
+../lib/bsp/MPU6050/stm32f1_mpu6050.c:186:18:MPU6050_ReadAccelerometer	1
+../lib/bsp/MPU6050/stm32f1_mpu6050.c:201:18:MPU6050_ReadGyroscope	1
+../lib/bsp/MPU6050/stm32f1_mpu6050.c:216:18:MPU6050_ReadTemperature	1
+../lib/bsp/MPU6050/stm32f1_mpu6050.c:231:18:MPU6050_ReadAll	1

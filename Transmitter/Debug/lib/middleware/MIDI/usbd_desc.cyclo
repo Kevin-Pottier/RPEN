@@ -1,0 +1,9 @@
+../lib/middleware/MIDI/usbd_desc.c:153:11:USBD_FS_DeviceDescriptor	1
+../lib/middleware/MIDI/usbd_desc.c:165:11:USBD_FS_LangIDStrDescriptor	1
+../lib/middleware/MIDI/usbd_desc.c:177:11:USBD_FS_ProductStrDescriptor	2
+../lib/middleware/MIDI/usbd_desc.c:199:11:USBD_FS_ManufacturerStrDescriptor	1
+../lib/middleware/MIDI/usbd_desc.c:212:11:USBD_FS_SerialStrDescriptor	1
+../lib/middleware/MIDI/usbd_desc.c:229:11:USBD_FS_ConfigStrDescriptor	2
+../lib/middleware/MIDI/usbd_desc.c:250:11:USBD_FS_InterfaceStrDescriptor	2
+../lib/middleware/MIDI/usbd_desc.c:285:13:Get_SerialNum	2
+../lib/middleware/MIDI/usbd_desc.c:309:13:IntToUnicode	3

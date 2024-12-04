@@ -66,3 +66,9 @@ This project is open for educational and experimental purposes. Any reuse must i
 ---
 
 **Note:** Associated files, including the PCB schematic and the CAD design of the pen case, are available upon request.
+
+To request access, please contact me at:  
+
+📧 **Kévin Pottier**    
+GitHub: [https://github.com/JegHeterKevin1](https://github.com/JegHeterKevin1)
+Email : kevin.pottier@reseau.eseo.fr

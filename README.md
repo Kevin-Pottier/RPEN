@@ -1,6 +1,6 @@
 # RPEN - Connected Pen
 
-RPEN (Remote Pen) is an innovative connected pen project developed as part of the DEEP (Digital Embedded Electronics Project) program at ESEO. This pen allows users to write on a screen remotely via Bluetooth, providing a practical and interactive solution for teaching or creative applications.
+RPEN (Remote Pen & Air Pen) is an innovative connected pen project developed as part of the DEEP (Digital Embedded Electronics Project) program at ESEO. This pen allows users to write on a screen remotely via Bluetooth, providing a practical and interactive solution for teaching or creative applications.
 
 ## Features
 

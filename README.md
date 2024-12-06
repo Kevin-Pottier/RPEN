@@ -51,7 +51,7 @@ The project underwent various tests:
 ## Contributions
 
 ### Developers
-- **[Kevin POTTIER](https://github.com/JegHeterKevin1)**:
+- **[Kevin POTTIER](https://github.com/Kevin-Pottier)**:
 - **[Julien RACKI](https://github.com/juickar)**:
 
 ## Potential Improvements

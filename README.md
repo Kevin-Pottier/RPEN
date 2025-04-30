@@ -70,5 +70,5 @@ This project is open for educational and experimental purposes. Any reuse must i
 To request access, please contact me at:  
 
 📧 **Kévin Pottier**    
-GitHub: [https://github.com/JegHeterKevin1](https://github.com/JegHeterKevin1)
+GitHub: [https://github.com/Kevin-Pottier](https://github.com/Kevin-Pottier)
 Email : kevin.pottier@reseau.eseo.fr

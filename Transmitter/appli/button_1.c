@@ -1,272 +1,234 @@
-/*
- * button.c
- *
- *  Created on: 26 juin 2019
- *      Author: Nirgal
- */
-#include <button_1.h>
+#include "button_1.h"
 #include "config.h"
 #include "stm32f1_gpio.h"
 #include "macro_types.h"
 #include "systick.h"
+#include "stm32f1xx_hal_gpio.h"
 
-#define LONG_PRESS_DURATION	1000	//unité : [1ms] => 1 seconde.
+/*******************************************************************************
+ * @file    button_1.c
+ * @author  Nirgal
+ * @date    2019
+ * @brief   Button handling and debouncing for RPEN transmitter device.
+ ******************************************************************************/
 
-static void process_ms(void);
 
-static volatile bool_e flag_10ms;
-static volatile uint32_t t_1 = 0;
-static volatile uint32_t t_2 = 0;
-static volatile uint32_t t_3 = 0;
-static bool_e initialized = FALSE;
+#define LONG_PRESS_DURATION_MS  1000U   /**< Long press duration in ms. */
 
+
+static void Button_ProcessMs(void);
+
+static volatile bool_e g_flag_10ms = FALSE;
+static volatile uint32_t g_t1 = 0;
+static volatile uint32_t g_t2 = 0;
+static volatile uint32_t g_t3 = 0;
+static bool_e g_initialized = FALSE;
+
+
+/**
+ * @brief Initialize button 1 (GPIOA, PIN 12).
+ */
 void BUTTON_1_init(void)
 {
-	//Initialisation du port du bouton bleu en entrée
-	BSP_GPIO_PinCfg(GPIOA, GPIO_PIN_12, GPIO_MODE_INPUT,GPIO_PULLUP,GPIO_SPEED_FREQ_HIGH);
-
-	Systick_add_callback_function(&process_ms);
-
-	initialized = TRUE;
-}
-void BUTTON_2_init(void)
-{
-	//Initialisation du port du bouton bleu en entrée
-	BSP_GPIO_PinCfg(GPIOA, GPIO_PIN_11, GPIO_MODE_INPUT,GPIO_PULLUP,GPIO_SPEED_FREQ_HIGH);
-
-	Systick_add_callback_function(&process_ms);
-
-	initialized = TRUE;
-}
-void BUTTON_3_init(void)
-{
-	//Initialisation du port du bouton bleu en entrée
-	BSP_GPIO_PinCfg(GPIOA, GPIO_PIN_10, GPIO_MODE_INPUT,GPIO_PULLUP,GPIO_SPEED_FREQ_HIGH);
-
-	Systick_add_callback_function(&process_ms);
-
-	initialized = TRUE;
-}
-
-static void process_ms(void)
-{
-	static uint32_t t10ms = 0;
-	t10ms = (t10ms + 1)%10;		//incrémentation de la variable t10ms (modulo 10 !)
-	if(!t10ms)
-		flag_10ms = TRUE; //toutes les 10ms, on lève ce flag.
-	if(t_1)
-		t_1--;
-	if(t_2)
-			t_2--;
-	if(t_3)
-			t_3--;
+	BSP_GPIO_PinCfg(GPIOA, GPIO_PIN_12, GPIO_MODE_INPUT, GPIO_PULLUP, GPIO_SPEED_FREQ_HIGH);
+	Systick_add_callback_function(&Button_ProcessMs);
+	g_initialized = TRUE;
 }
 
 /**
-	Ces machines à états gèrent la détection d'appuis sur le bouton bleu.
-	Elle doit être appelée en boucle très régulièrement.
-	Précondition : avoir appelé auparavant BUTTON_init();
-	Si un appui vient d'être fait, elle renverra BUTTON_EVENT_SHORT_PRESS ou BUTTON_EVENT_LONG_PRESS
-*/
-button_event_e BUTTON_1_state_machine(void)
-
+ * @brief Initialize button 2 (GPIOA, PIN 11).
+ */
+void BUTTON_2_init(void)
 {
-	typedef enum
-	{
-		INIT = 0,
-		WAIT_BUTTON,	//En C, les nombres se suivent dans une enum.
-		BUTTON_PRESSED,
-		WAIT_RELEASE
-	}state_e;
+	BSP_GPIO_PinCfg(GPIOA, GPIO_PIN_11, GPIO_MODE_INPUT, GPIO_PULLUP, GPIO_SPEED_FREQ_HIGH);
+	Systick_add_callback_function(&Button_ProcessMs);
+	g_initialized = TRUE;
+}
 
-	static state_e state = INIT; //La variable d'état, = INIT au début du programme !
-	/**	Le mot clé static est INDISPENSABLE :
-	* 	"state" DOIT GARDER SA VALEUR d'un appel à l'autre de la fonction.
-	*	Une place lui est réservée en mémoire de façon permanente
-	*	(et non pas temporaire dans la pile !)
-	*/
+/**
+ * @brief Initialize button 3 (GPIOA, PIN 10).
+ */
+void BUTTON_3_init(void)
+{
+	BSP_GPIO_PinCfg(GPIOA, GPIO_PIN_10, GPIO_MODE_INPUT, GPIO_PULLUP, GPIO_SPEED_FREQ_HIGH);
+	Systick_add_callback_function(&Button_ProcessMs);
+	g_initialized = TRUE;
+}
 
-	button_event_e ret = BUTTON_EVENT_NONE;
+
+/**
+ * @brief SysTick callback for button timing and debouncing (every ms).
+ */
+static void Button_ProcessMs(void)
+{
+	static uint32_t t10ms = 0;
+	t10ms = (t10ms + 1) % 10;
+	if (t10ms == 0)
+		g_flag_10ms = TRUE;
+	if (g_t1)
+		g_t1--;
+	if (g_t2)
+		g_t2--;
+	if (g_t3)
+		g_t3--;
+}
+
+
+/**
+ * @brief State machine for button 1 (GPIOA, PIN 12).
+ * @return Button event (short press, long press, or none)
+ */
+button_event_e BUTTON_1_state_machine(void)
+{
+	typedef enum {
+		STATE_INIT = 0,
+		STATE_WAIT_BUTTON,
+		STATE_PRESSED,
+		STATE_WAIT_RELEASE
+	} ButtonState_e;
+
+	static ButtonState_e state = STATE_INIT;
+	button_event_e event = BUTTON_EVENT_NONE;
 	bool_e current_button;
 
-	if(flag_10ms && initialized)	//le cadencement de cette portion de code à 10ms permet d'éliminer l'effet des rebonds sur le signal en provenance du bouton.
-	{
-		flag_10ms = FALSE;
+	if (g_flag_10ms && g_initialized) {
+		g_flag_10ms = FALSE;
 		current_button = !HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_12);
-		switch(state)
-		{
-			case INIT:
-				state = WAIT_BUTTON;	//Changement d'état
+		switch (state) {
+			case STATE_INIT:
+				state = STATE_WAIT_BUTTON;
 				break;
-			case WAIT_BUTTON:
-				ret =BUTTON_EVENT_NONE;
-				if(current_button)
-				{
-
-					t_1=LONG_PRESS_DURATION;	//Action réalisée sur la transition.
-					state = BUTTON_PRESSED;	//Changement d'état conditionné à "if(current_button)"
+			case STATE_WAIT_BUTTON:
+				event = BUTTON_EVENT_NONE;
+				if (current_button) {
+					g_t1 = LONG_PRESS_DURATION_MS;
+					state = STATE_PRESSED;
 				}
 				break;
-			case BUTTON_PRESSED:
-				if(t_1==0)
-				{
-					ret = BUTTON_EVENT_LONG_PRESS;
-
-					state = WAIT_RELEASE;		//le temps est écoulé, c'était un appui long !
-				}
-				else if(!current_button)
-				{
-					ret = BUTTON_EVENT_SHORT_PRESS;
-
-					state = WAIT_BUTTON;	//le bouton a été relâché avant l'écoulement du temps, c'était un appui court !
+			case STATE_PRESSED:
+				if (g_t1 == 0) {
+					event = BUTTON_EVENT_LONG_PRESS;
+					state = STATE_WAIT_RELEASE;
+				} else if (!current_button) {
+					event = BUTTON_EVENT_SHORT_PRESS;
+					state = STATE_WAIT_BUTTON;
 				}
 				break;
-
-			case WAIT_RELEASE:
-				if(!current_button)
-				{
-
-					state = WAIT_BUTTON;
+			case STATE_WAIT_RELEASE:
+				if (!current_button) {
+					state = STATE_WAIT_BUTTON;
 				}
 				break;
 			default:
-				state = INIT;	//N'est jamais sensé se produire.
+				state = STATE_INIT;
 				break;
 		}
 	}
-	return ret;
+	return event;
 }
+
+/**
+ * @brief State machine for button 2 (GPIOA, PIN 11).
+ * @return Button event (short press, long press, or none)
+ */
 button_event_e BUTTON_2_state_machine(void)
 {
-	typedef enum
-	{
-		INIT = 0,
-		WAIT_BUTTON,	//En C, les nombres se suivent dans une enum.
-		BUTTON_PRESSED,
-		WAIT_RELEASE
-	}state_e;
+	typedef enum {
+		STATE_INIT = 0,
+		STATE_WAIT_BUTTON,
+		STATE_PRESSED,
+		STATE_WAIT_RELEASE
+	} ButtonState_e;
 
-	static state_e state = INIT; //La variable d'état, = INIT au début du programme !
-	/**	Le mot clé static est INDISPENSABLE :
-	* 	"state" DOIT GARDER SA VALEUR d'un appel à l'autre de la fonction.
-	*	Une place lui est réservée en mémoire de façon permanente
-	*	(et non pas temporaire dans la pile !)
-	*/
-
-	button_event_e ret = BUTTON_EVENT_NONE;
+	static ButtonState_e state = STATE_INIT;
+	button_event_e event = BUTTON_EVENT_NONE;
 	bool_e current_button;
 
-	if(flag_10ms && initialized)	//le cadencement de cette portion de code à 10ms permet d'éliminer l'effet des rebonds sur le signal en provenance du bouton.
-	{
-		flag_10ms = FALSE;
+	if (g_flag_10ms && g_initialized) {
+		g_flag_10ms = FALSE;
 		current_button = !HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_11);
-		switch(state)
-		{
-			case INIT:
-				state = WAIT_BUTTON;	//Changement d'état
+		switch (state) {
+			case STATE_INIT:
+				state = STATE_WAIT_BUTTON;
 				break;
-			case WAIT_BUTTON:
-				ret =BUTTON_EVENT_NONE;
-				if(current_button)
-				{
-
-					t_2=LONG_PRESS_DURATION;	//Action réalisée sur la transition.
-					state = BUTTON_PRESSED;	//Changement d'état conditionné à "if(current_button)"
+			case STATE_WAIT_BUTTON:
+				event = BUTTON_EVENT_NONE;
+				if (current_button) {
+					g_t2 = LONG_PRESS_DURATION_MS;
+					state = STATE_PRESSED;
 				}
 				break;
-			case BUTTON_PRESSED:
-				if(t_2==0)
-				{
-					ret = BUTTON_EVENT_LONG_PRESS;
-
-					state = WAIT_RELEASE;		//le temps est écoulé, c'était un appui long !
-				}
-				else if(!current_button)
-				{
-					ret = BUTTON_EVENT_SHORT_PRESS;
-
-					state = WAIT_BUTTON;	//le bouton a été relâché avant l'écoulement du temps, c'était un appui court !
+			case STATE_PRESSED:
+				if (g_t2 == 0) {
+					event = BUTTON_EVENT_LONG_PRESS;
+					state = STATE_WAIT_RELEASE;
+				} else if (!current_button) {
+					event = BUTTON_EVENT_SHORT_PRESS;
+					state = STATE_WAIT_BUTTON;
 				}
 				break;
-
-			case WAIT_RELEASE:
-				if(!current_button)
-				{
-
-					state = WAIT_BUTTON;
+			case STATE_WAIT_RELEASE:
+				if (!current_button) {
+					state = STATE_WAIT_BUTTON;
 				}
 				break;
 			default:
-				state = INIT;	//N'est jamais sensé se produire.
+				state = STATE_INIT;
 				break;
 		}
 	}
-	return ret;
+	return event;
 }
+
+/**
+ * @brief State machine for button 3 (GPIOA, PIN 10).
+ * @return Button event (short press, long press, or none)
+ */
 button_event_e BUTTON_3_state_machine(void)
 {
-	typedef enum
-	{
-		INIT = 0,
-		WAIT_BUTTON,	//En C, les nombres se suivent dans une enum.
-		BUTTON_PRESSED,
-		WAIT_RELEASE
-	}state_e;
+	typedef enum {
+		STATE_INIT = 0,
+		STATE_WAIT_BUTTON,
+		STATE_PRESSED,
+		STATE_WAIT_RELEASE
+	} ButtonState_e;
 
-	static state_e state = INIT; //La variable d'état, = INIT au début du programme !
-	/**	Le mot clé static est INDISPENSABLE :
-	* 	"state" DOIT GARDER SA VALEUR d'un appel à l'autre de la fonction.
-	*	Une place lui est réservée en mémoire de façon permanente
-	*	(et non pas temporaire dans la pile !)
-	*/
-
-	button_event_e ret = BUTTON_EVENT_NONE;
+	static ButtonState_e state = STATE_INIT;
+	button_event_e event = BUTTON_EVENT_NONE;
 	bool_e current_button;
 
-	if(flag_10ms && initialized)	//le cadencement de cette portion de code à 10ms permet d'éliminer l'effet des rebonds sur le signal en provenance du bouton.
-	{
-		flag_10ms = FALSE;
+	if (g_flag_10ms && g_initialized) {
+		g_flag_10ms = FALSE;
 		current_button = !HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
-		switch(state)
-		{
-			case INIT:
-				state = WAIT_BUTTON;	//Changement d'état
+		switch (state) {
+			case STATE_INIT:
+				state = STATE_WAIT_BUTTON;
 				break;
-			case WAIT_BUTTON:
-				ret =BUTTON_EVENT_NONE;
-				if(current_button)
-				{
-
-					t_3=LONG_PRESS_DURATION;	//Action réalisée sur la transition.
-					state = BUTTON_PRESSED;	//Changement d'état conditionné à "if(current_button)"
+			case STATE_WAIT_BUTTON:
+				event = BUTTON_EVENT_NONE;
+				if (current_button) {
+					g_t3 = LONG_PRESS_DURATION_MS;
+					state = STATE_PRESSED;
 				}
 				break;
-			case BUTTON_PRESSED:
-				if(t_3==0)
-				{
-					ret = BUTTON_EVENT_LONG_PRESS;
-
-					state = WAIT_RELEASE;		//le temps est écoulé, c'était un appui long !
-				}
-				else if(!current_button)
-				{
-					ret = BUTTON_EVENT_SHORT_PRESS;
-
-					state = WAIT_BUTTON;	//le bouton a été relâché avant l'écoulement du temps, c'était un appui court !
+			case STATE_PRESSED:
+				if (g_t3 == 0) {
+					event = BUTTON_EVENT_LONG_PRESS;
+					state = STATE_WAIT_RELEASE;
+				} else if (!current_button) {
+					event = BUTTON_EVENT_SHORT_PRESS;
+					state = STATE_WAIT_BUTTON;
 				}
 				break;
-
-			case WAIT_RELEASE:
-				if(!current_button)
-				{
-
-					state = WAIT_BUTTON;
+			case STATE_WAIT_RELEASE:
+				if (!current_button) {
+					state = STATE_WAIT_BUTTON;
 				}
 				break;
 			default:
-				state = INIT;	//N'est jamais sensé se produire.
+				state = STATE_INIT;
 				break;
 		}
 	}
-	return ret;
+	return event;
 }

@@ -1,1 +1,3 @@
+#ifndef CONFIG_H_
+#define CONFIG_H_
 // ...existing code from config.h will be refactored and moved here...

@@ -1,3 +1,0 @@
-../appli/led.c:23:6:LED_init	1
-../appli/led.c:32:6:LED_set	2
-../appli/led.c:42:13:LED_process_ms	8

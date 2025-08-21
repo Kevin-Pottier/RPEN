@@ -1,7 +1,0 @@
-../appli/button_1.c:23:6:BUTTON_1_init	1
-../appli/button_1.c:32:6:BUTTON_2_init	1
-../appli/button_1.c:41:6:BUTTON_3_init	1
-../appli/button_1.c:51:13:process_ms	5
-../appli/button_1.c:71:16:BUTTON_1_state_machine	11
-../appli/button_1.c:139:16:BUTTON_2_state_machine	11
-../appli/button_1.c:206:16:BUTTON_3_state_machine	11

@@ -1,5 +1,0 @@
-../appli/main.c:43:6:writeLED	1
-../appli/main.c:51:8:readButton	1
-../appli/main.c:60:13:process_ms	2
-../appli/main.c:68:5:main	2
-../appli/main.c:122:13:state_machine	36

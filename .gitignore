@@ -55,3 +55,12 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+*.bin
+*.lst
+*.srec
+*.dis
+*.dump
+*.log
+*.sym
+/Debug/
+/build/
